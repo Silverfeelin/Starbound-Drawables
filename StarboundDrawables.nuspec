@@ -17,5 +17,6 @@
   <files>
     <file src="LICENSE.md" target="" />
     <file src="StarboundDrawables\bin\Release\StarboundDrawables.dll" target="lib\net45" />
+    <file src="StarboundDrawables\bin\Release\StarboundDrawables.XML" target="lib\net45" />
   </files>
 </package>

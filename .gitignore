@@ -250,3 +250,9 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+StarboundDrawables/bin/Release/StarboundDrawables.dll
+StarboundDrawables/bin/Release/StarboundDrawables.pdb
+*.cache
+StarboundDrawables/obj/Release/StarboundDrawables.csproj.FileListAbsolute.txt
+StarboundDrawables/obj/Release/StarboundDrawables.dll
+StarboundDrawables/obj/Release/StarboundDrawables.pdb
