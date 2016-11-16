@@ -1,0 +1,10 @@
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\StarboundDrawables\bin\Release\StarboundDrawables.dll
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\StarboundDrawables\bin\Release\StarboundDrawables.pdb
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\StarboundDrawables\obj\Release\StarboundDrawables.csprojResolveAssemblyReference.cache
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\StarboundDrawables\obj\Release\StarboundDrawables.dll
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\StarboundDrawables\obj\Release\StarboundDrawables.pdb
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\bin\Release\StarboundDrawables.dll
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\bin\Release\StarboundDrawables.pdb
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\obj\Release\StarboundDrawables.csprojResolveAssemblyReference.cache
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\obj\Release\StarboundDrawables.dll
+D:\Users\Silver\Documents\GitLab\Starbound-Drawables\StarboundDrawables\obj\Release\StarboundDrawables.pdb
