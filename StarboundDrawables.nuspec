@@ -7,6 +7,7 @@
     <owners>Silverfeelin</owners>
     <licenseUrl>https://github.com/Silverfeelin/Starbound-Drawables/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Silverfeelin/Starbound-Drawables</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/Silverfeelin/Starbound-DrawablesGenerator/21bb8d6f117ade6492c20dd641f493c5d3eab076/DrawablesGenerator/dgicon-big.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>StarboundDrawables is a library that allows you to create drawables from image files.</description>
     <releaseNotes>Beta release, trying to figure NuGet out.</releaseNotes>
