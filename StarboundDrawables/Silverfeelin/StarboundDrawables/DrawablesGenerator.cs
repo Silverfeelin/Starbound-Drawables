@@ -10,15 +10,6 @@ namespace Silverfeelin.StarboundDrawables
 {
     public class DrawablesGenerator
     {
-        /// <summary>
-        /// Highest amount of allowed pixels in the selected image.
-        /// PixelWidth * PixelHeight should not exceed this value.
-        /// 
-        /// Yes, this isn't the best way to limit drawables.
-        /// EG. a 1x32768 texture will still create far more drawables than 4096x8.
-        /// </summary>
-        public static int PixelLimit { get; set; } = 32768;
-
         private Bitmap _image;
         /// <summary>
         /// Returns the path to the given image; the image to create drawables for.
@@ -99,7 +90,6 @@ namespace Silverfeelin.StarboundDrawables
         /// <exception cref="FileNotFoundException">Thrown when the given image file could not be found.</exception>
         /// <exception cref="ArgumentNullException">Thrown when no path was given.</exception>
         /// <exception cref="ArgumentException">Thrown when the given path is not valid.</exception>
-        /// <exception cref="DrawableException">Thrown when the given image exceeds <see cref="PixelLimit"/>.</exception>
         public DrawablesGenerator(string imagePath)
         {
             SetImage(imagePath);
@@ -111,7 +101,6 @@ namespace Silverfeelin.StarboundDrawables
         /// This image is not disposed by this class if any exceptions occur.
         /// </summary>
         /// <param name="image">Image to generate drawables for</param>
-        /// <exception cref="DrawableException">Thrown when the given image exceeds <see cref="PixelLimit"/>.</exception>
         public DrawablesGenerator(Bitmap image)
         {
             SetImage(image);
@@ -120,38 +109,18 @@ namespace Silverfeelin.StarboundDrawables
         public void SetImage(string imagePath)
         {
             var bytes = File.ReadAllBytes(imagePath);
+
             var ms = new MemoryStream(bytes);
+            
             Bitmap b = (Bitmap)System.Drawing.Image.FromStream(ms);
-
-            ConfirmImage(b);
-
+                
             ImagePath = imagePath;
             _image = b;
         }
 
         public void SetImage(Bitmap bitmap)
         {
-            ConfirmImage(bitmap);
             _image = bitmap;
-        }
-
-        /// <summary>
-        /// Confirms the dimensions of the image to be within <see cref="PixelLimit"/>.
-        /// </summary>
-        /// <param name="image">Image to check</param>
-        private void ConfirmImage(Bitmap image)
-        {
-            int width = image.Width,
-                height = image.Height,
-                pixels;
-            pixels = width * height;
-
-            if (pixels > PixelLimit)
-            {
-                ImagePath = null;
-                _image = null;
-                throw new DrawableException(string.Format("The given image exceeds the set pixel limit.\nWidth: {0}\nHeight: {1}\nTotal: {2}\nLimit: {3}", width, height, pixels, PixelLimit));
-            }
         }
 
         /// <summary>

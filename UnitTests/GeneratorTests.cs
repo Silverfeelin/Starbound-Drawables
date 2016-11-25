@@ -62,27 +62,6 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void TestLargeBitmap()
-        {
-            int limit = DrawablesGenerator.PixelLimit;
-
-            string path = CreateTempBitmap(limit + 1, 1);
-
-            try
-            {
-                DrawablesGenerator dg = new DrawablesGenerator(path);
-                Assert.Fail("Expected DrawableException; too many pixels.");
-            }
-            catch (DrawableException) { }
-            finally
-            {
-                if (File.Exists(path))
-                    File.Delete(path);
-
-            }
-        }
-
-        [TestMethod]
         public void TestGenerate()
         {
             int w = 4, h = 4;
