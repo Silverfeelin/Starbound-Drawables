@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Silverfeelin.StarboundDrawables
 {
+    /// <summary>
+    /// Class used to generate Starbound Drawables from an image.
+    /// Each image should use a new instance of this class for drawable generation.
+    /// </summary>
     public class DrawablesGenerator
     {
         private Bitmap _image;
@@ -106,18 +110,27 @@ namespace Silverfeelin.StarboundDrawables
             SetImage(image);
         }
 
+        /// <summary>
+        /// Sets the image to generate drawables for. A valid image path is expected.
+        /// </summary>
+        /// <seealso cref="SetImage(Bitmap)"/>
+        /// <param name="imagePath">File path to the image.</param>
         public void SetImage(string imagePath)
         {
             var bytes = File.ReadAllBytes(imagePath);
-
             var ms = new MemoryStream(bytes);
-            
             Bitmap b = (Bitmap)System.Drawing.Image.FromStream(ms);
-                
+
             ImagePath = imagePath;
-            _image = b;
+            SetImage(b);
         }
 
+        /// <summary>
+        /// Sets the image to generate drawables for. The Bitmap is not cloned; a reference is set.
+        /// Does not set ImagePath.
+        /// </summary>
+        /// <seealso cref="SetImage(string)"/>
+        /// <param name="bitmap">Bitmap to generate drawables for.</param>
         public void SetImage(Bitmap bitmap)
         {
             _image = bitmap;
@@ -207,6 +220,63 @@ namespace Silverfeelin.StarboundDrawables
             }
 
             return new DrawablesOutput(drawables, Image.Width, Image.Height, OffsetX, OffsetY);
+        }
+
+        public string GenerateExperimental()
+        {
+            if (Image == null)
+                throw new DrawableException("Sorry! No methods have been made available to generate drawables out of thin air. Please provide an image.");
+
+            if (Image.Width > 256 || Image.Height > 256)
+                throw new ArgumentException("That's too many pixels! This method only supports up to 256 pixels in either dimension.");
+
+            Bitmap image = (Bitmap)Image.Clone();
+            image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            string template = "?setcolor=ffffff?replace;00000000=ffffff;ffffff00=ffffff?setcolor=ffffff" +
+                "?crop;0;0;2;2" +
+                "?blendmult=/items/active/weapons/protectorate/aegisaltpistol/beamend.png;0;0" +
+                "?replace;A355C0A5={BottomLeft};A355C07B={BottomRight};FFFFFFA5={TopLeft};FFFFFF7B={TopRight}" +
+                "?scale={ScaleWidth};{ScaleHeight}" +
+                "?crop;1;1;{Width};{Height}";
+
+            StringBuilder sb = new StringBuilder(template);
+
+            int right = image.Width - 1;
+            int top = image.Height - 1;
+
+            Color bottomLeft = Color.FromArgb(255, 0, 1, 0);
+            Color bottomRight = Color.FromArgb(255, right, 1, 0);
+            Color topLeft = Color.FromArgb(255, 0, 1, top);
+            Color topRight = Color.FromArgb(255, right, 1, top);
+
+            sb.Replace("{BottomLeft}", bottomLeft.ToRGBAHexString());
+            sb.Replace("{BottomRight}", bottomRight.ToRGBAHexString());
+            sb.Replace("{TopLeft}", topLeft.ToRGBAHexString());
+            sb.Replace("{TopRight}", topRight.ToRGBAHexString());
+
+            sb.Replace("{Width}", (Image.Width + 1).ToString());
+            sb.Replace("{Width}", (Image.Width + 1).ToString());
+            sb.Replace("{Height}", (Image.Height + 1).ToString());
+            sb.Replace("{ScaleWidth}", Image.Width.ToString());
+            sb.Replace("{ScaleHeight}", Image.Height.ToString());
+
+            sb.Append("?replace");
+            
+            for (int i = 0; i < 256; i++)
+            {
+                for (int j = 0; j < 256; j++)
+                {
+                    if (i > image.Width - 1 || j > image.Height - 1) continue;
+
+                    Color color = Image.GetPixel(i, j);
+                    if (color.A == 1) continue;
+                    sb.AppendFormat(";{0}01{1}00={2}", i.ToString("X2"), j.ToString("X2"), color.ToRGBAHexString());
+                }
+            }
+
+
+            return sb.ToString();
         }
 
         /// <summary>

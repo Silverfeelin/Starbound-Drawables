@@ -58,7 +58,7 @@ namespace Silverfeelin.StarboundDrawables
         /// <param name="hex">Hexadecimal number string</param>
         /// <returns>Converted Integer or -1 if the conversion failed.</returns>
         /// <exception cref="FormatException">Thrown if the given value is not a valid hexadecimal string.</exception>
-        public static int HexToInt(string hex)
+        public static int HexToInt(this string hex)
         {
             uint number = Convert.ToUInt32(hex, 16);
             return (int)number;
