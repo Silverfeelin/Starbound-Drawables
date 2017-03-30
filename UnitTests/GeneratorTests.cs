@@ -4,6 +4,7 @@ using Silverfeelin.StarboundDrawables;
 using System.IO;
 using System.Drawing;
 using System.Text;
+using System.Diagnostics;
 
 namespace UnitTests
 {
@@ -194,6 +195,25 @@ namespace UnitTests
                 if (File.Exists(path))
                     File.Delete(path);
             }
+        }
+
+        private TestContext testContextInstance;
+        public TestContext TestContext { get { return testContextInstance; } set { testContextInstance = value; } }
+
+        [TestMethod]
+        public void TestExperimental()
+        {
+            // Well spotted, this isn't a proper unit test! It's a sample for Degranon, cleverly disguised as a unit test.
+            string path = @"C:\Users\SomeUser\Pictures\someImage.jpg";
+
+            DrawablesGenerator generator = new DrawablesGenerator(path)
+            {
+                RotateFlipStyle = RotateFlipType.RotateNoneFlipNone // you may need to set this to RotateNoneFlipY, depending on where you apply the results.
+            };
+
+            string result = generator.GenerateExperimental();
+
+            TestContext.WriteLine(result);
         }
     }
 }

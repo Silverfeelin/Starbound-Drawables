@@ -231,7 +231,7 @@ namespace Silverfeelin.StarboundDrawables
                 throw new ArgumentException("That's too many pixels! This method only supports up to 256 pixels in either dimension.");
 
             Bitmap image = (Bitmap)Image.Clone();
-            image.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            image.RotateFlip(RotateFlipStyle);
 
             string template = "?setcolor=ffffff?replace;00000000=ffffff;ffffff00=ffffff?setcolor=ffffff" +
                 "?crop;0;0;2;2" +
@@ -245,10 +245,10 @@ namespace Silverfeelin.StarboundDrawables
             int right = image.Width - 1;
             int top = image.Height - 1;
 
-            Color bottomLeft = Color.FromArgb(255, 0, 1, 0);
-            Color bottomRight = Color.FromArgb(255, right, 1, 0);
-            Color topLeft = Color.FromArgb(255, 0, 1, top);
-            Color topRight = Color.FromArgb(255, right, 1, top);
+            Color bottomLeft = Color.FromArgb(0, 0, 1, 0);
+            Color bottomRight = Color.FromArgb(0, right, 1, 0);
+            Color topLeft = Color.FromArgb(0, 0, 1, top);
+            Color topRight = Color.FromArgb(0, right, 1, top);
 
             sb.Replace("{BottomLeft}", bottomLeft.ToRGBAHexString());
             sb.Replace("{BottomRight}", bottomRight.ToRGBAHexString());
@@ -263,9 +263,9 @@ namespace Silverfeelin.StarboundDrawables
 
             sb.Append("?replace");
             
-            for (int i = 0; i < 256; i++)
+            for (int i = 0; i < image.Width; i++)
             {
-                for (int j = 0; j < 256; j++)
+                for (int j = 0; j < image.Height; j++)
                 {
                     if (i > image.Width - 1 || j > image.Height - 1) continue;
 
