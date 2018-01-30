@@ -16,3 +16,13 @@ D:\Users\Silver\Documents\GitLab\Starbound-Drawables\UnitTests\bin\Release\Micro
 D:\Users\Silver\Documents\GitLab\Starbound-Drawables\UnitTests\obj\Release\UnitTests.csprojResolveAssemblyReference.cache
 D:\Users\Silver\Documents\GitLab\Starbound-Drawables\UnitTests\obj\Release\UnitTests.dll
 D:\Users\Silver\Documents\GitLab\Starbound-Drawables\UnitTests\obj\Release\UnitTests.pdb
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\bin\Release\UnitTests.dll
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\bin\Release\UnitTests.pdb
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\bin\Release\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\bin\Release\StarboundDrawables.dll
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\bin\Release\StarboundDrawables.pdb
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\bin\Release\StarboundDrawables.xml
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\bin\Release\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\obj\Release\UnitTests.csprojResolveAssemblyReference.cache
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\obj\Release\UnitTests.dll
+D:\Users\Silver\Documents\GitHub\Starbound-Drawables\UnitTests\obj\Release\UnitTests.pdb

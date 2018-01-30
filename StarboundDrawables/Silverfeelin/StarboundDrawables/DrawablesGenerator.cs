@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -133,9 +135,18 @@ namespace Silverfeelin.StarboundDrawables
                 throw new DrawableException("Attempted to generate drawables for a disposed image object.");
 
             Color? ignore = IgnoreColor;
+            
+            // Copy into 32bppARGB to read bytes correctly.
+            Bitmap b = (Bitmap)Image.Clone(new Rectangle(0, 0, Image.Width, Image.Height), PixelFormat.Format32bppArgb);
 
-            Bitmap b = (Bitmap)Image.Clone();
+            // Flip in desired direction.
             b.RotateFlip(RotateFlipStyle);
+
+            // Copy data for reading. Much faster than GetPixel (thanks Degranon for making me put extra effort into this old code).
+            BitmapData bData = b.LockBits(new Rectangle(0, 0, b.Width, b.Height), ImageLockMode.ReadWrite, b.PixelFormat);
+            byte[] bPixels = new byte[bData.Width * bData.Height * 4];
+            Marshal.Copy(bData.Scan0, bPixels, 0, bPixels.Length);
+            b.UnlockBits(bData);
 
             Point frameCount = new Point(
                 (int)Math.Ceiling((decimal)b.Width / DrawableWidth),
@@ -174,7 +185,7 @@ namespace Silverfeelin.StarboundDrawables
                                 continue;
                             }
 
-                            Color imageColor = b.GetPixel(Convert.ToInt32(x), Convert.ToInt32(y));
+                            Color imageColor = GetPixel(bPixels, b.Width, Convert.ToInt32(x), Convert.ToInt32(y));
 
                             // Pixel color is invisible or ignored.
                             if ((ignore.HasValue && imageColor.Equals(ignore)) || (imageColor.A == 0 && !ReplaceBlank))
@@ -207,6 +218,17 @@ namespace Silverfeelin.StarboundDrawables
             }
 
             return new DrawablesOutput(drawables, Image.Width, Image.Height, OffsetX, OffsetY);
+        }
+
+        private Color GetPixel(byte[] data, int width, int x, int y)
+        {
+            int offset = width * y * 4 + x * 4;
+            return Color.FromArgb(
+                data[offset + 3],
+                data[offset + 2],
+                data[offset + 1],
+                data[offset]
+                );
         }
 
         /// <summary>

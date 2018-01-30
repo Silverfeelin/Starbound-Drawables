@@ -61,6 +61,10 @@ namespace UnitTests
 
         }
 
+        /// <summary>
+        /// This method tests the generator, by seeing if the FROM RGB values match the TO RGB values.
+        /// This should be true, considering <see cref="CreateTempBitmap(32,8)"/> creates a duplicate of the signplaceholder template used by the generator (ignoring the alpha).
+        /// </summary>
         [TestMethod]
         public void TestGenerate()
         {
