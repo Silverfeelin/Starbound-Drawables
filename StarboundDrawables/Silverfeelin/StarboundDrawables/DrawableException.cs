@@ -3,13 +3,19 @@
 namespace Silverfeelin.StarboundDrawables
 {
     /// <summary>
-    /// Exception class used to raise exceptions specifically related to Drawables and the generation thereof.
+    /// Represents errors generating drawables.
     /// </summary>
     [Serializable]
     public class DrawableException : Exception
     {
+        /// <summary>
+        /// Instantiates a new drawable exception.
+        /// </summary>
         public DrawableException() {}
 
+        /// <summary>
+        /// Instantiates a new drawabrle exception with a message.
+        /// </summary>
         public DrawableException(string message) : base(message) {}
     }
 }

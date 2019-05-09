@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Silverfeelin.StarboundDrawables;
 using System.IO;
 using System.Drawing;
 using System.Text;
-using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Silverfeelin.StarboundDrawables;
 
 namespace UnitTests
 {
@@ -201,19 +200,21 @@ namespace UnitTests
         public TestContext TestContext { get { return testContextInstance; } set { testContextInstance = value; } }
 
         [TestMethod]
-        public void TestExperimental()
+        public void TestSmall()
         {
             // Well spotted, this isn't a proper unit test! It's a sample for Degranon, cleverly disguised as a unit test.
-            string path = @"C:\Users\SomeUser\Pictures\someImage.jpg";
+            string path = @"F:\Users\Silver\Pictures\grid.png";
 
             DrawablesGenerator generator = new DrawablesGenerator(path)
             {
-                RotateFlipStyle = RotateFlipType.RotateNoneFlipNone // you may need to set this to RotateNoneFlipY, depending on where you apply the results.
+                RotateFlipStyle = RotateFlipType.RotateNoneFlipY // you may need to set this to RotateNoneFlipY, depending on where you apply the results.
             };
 
-            string result = generator.GenerateExperimental();
-
-            TestContext.WriteLine(result);
+            var result = generator.GenerateScale();
+            foreach (var item in result.Drawables)
+            {
+                TestContext.WriteLine(item.Directives);
+            }
         }
     }
 }
