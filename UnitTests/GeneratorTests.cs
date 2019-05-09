@@ -1,9 +1,9 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Silverfeelin.StarboundDrawables;
 using System.IO;
 using System.Drawing;
 using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Silverfeelin.StarboundDrawables;
 
 namespace UnitTests
 {
@@ -193,6 +193,27 @@ namespace UnitTests
             {
                 if (File.Exists(path))
                     File.Delete(path);
+            }
+        }
+
+        private TestContext testContextInstance;
+        public TestContext TestContext { get { return testContextInstance; } set { testContextInstance = value; } }
+
+        [TestMethod]
+        public void TestSmall()
+        {
+            // Well spotted, this isn't a proper unit test! It's a sample for Degranon, cleverly disguised as a unit test.
+            string path = @"F:\Users\Silver\Pictures\grid.png";
+
+            DrawablesGenerator generator = new DrawablesGenerator(path)
+            {
+                RotateFlipStyle = RotateFlipType.RotateNoneFlipY // you may need to set this to RotateNoneFlipY, depending on where you apply the results.
+            };
+
+            var result = generator.GenerateScale();
+            foreach (var item in result.Drawables)
+            {
+                TestContext.WriteLine(item.Directives);
             }
         }
     }
