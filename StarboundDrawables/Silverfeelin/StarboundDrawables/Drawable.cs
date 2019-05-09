@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Silverfeelin.StarboundDrawables
 {
+    /// <summary>
+    /// Represents a drawable image with directives and position data.
+    /// </summary>
     public class Drawable
     {
         /// <summary>
@@ -19,18 +18,12 @@ namespace Silverfeelin.StarboundDrawables
         /// Gets or sets the directives for this Drawable.
         /// These directives are applied to the texture by calling <see cref="ResultImage"/>.
         /// </summary>
-        public string Directives { get; set; } = "";
+        public string Directives { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets the <see cref="Texture"/> plus <see cref="Directives"/>, which form this Drawable.
         /// </summary>
-        public string ResultImage
-        {
-            get
-            {
-                return this.Texture + this.Directives;
-            }
-        }
+        public string ResultImage => Texture + Directives;
 
         /// <summary>
         /// Gets or sets the horizontal position for this Drawable, in game pixels.
@@ -48,14 +41,8 @@ namespace Silverfeelin.StarboundDrawables
         /// </summary>
         public double BlockX
         {
-            get
-            {
-                return Math.Round(this.X / 8d, 3);
-            }
-            set
-            {
-                this.X = Convert.ToInt32(value * 8d);
-            }
+            get => Math.Round(X / 8d, 3);
+            set => X = Convert.ToInt32(value * 8d);
         }
 
         /// <summary>
@@ -64,14 +51,8 @@ namespace Silverfeelin.StarboundDrawables
         /// </summary>
         public double BlockY
         {
-            get
-            {
-                return Math.Round(this.Y / 8d, 3);
-            }
-            set
-            {
-                this.Y = Convert.ToInt32(value * 8d);
-            }
+            get => Math.Round(Y / 8d, 3);
+            set => Y = Convert.ToInt32(value * 8d);
         }
 
         /// <summary>
@@ -93,11 +74,11 @@ namespace Silverfeelin.StarboundDrawables
         public Drawable(string directives, int x, int y, string texture = null)
         {
             if (!string.IsNullOrWhiteSpace(texture))
-                this.Texture = texture;
+                Texture = texture;
 
-            this.Directives = directives;
-            this.X = x;
-            this.Y = y;
+            Directives = directives;
+            X = x;
+            Y = y;
         }
     }
 }

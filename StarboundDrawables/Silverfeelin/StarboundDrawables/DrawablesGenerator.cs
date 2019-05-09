@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Silverfeelin.StarboundDrawables
 {
+    /// <summary>
+    /// Class used to generate Starbound Drawables from an image.
+    /// Each image should use a new instance of this class for drawable generation.
+    /// </summary>
     public class DrawablesGenerator
     {
         private Bitmap _image;
@@ -106,18 +107,27 @@ namespace Silverfeelin.StarboundDrawables
             SetImage(image);
         }
 
+        /// <summary>
+        /// Sets the image to generate drawables for. A valid image path is expected.
+        /// </summary>
+        /// <seealso cref="SetImage(Bitmap)"/>
+        /// <param name="imagePath">File path to the image.</param>
         public void SetImage(string imagePath)
         {
             var bytes = File.ReadAllBytes(imagePath);
-
             var ms = new MemoryStream(bytes);
-            
             Bitmap b = (Bitmap)System.Drawing.Image.FromStream(ms);
-                
+
             ImagePath = imagePath;
-            _image = b;
+            SetImage(b);
         }
 
+        /// <summary>
+        /// Sets the image to generate drawables for. The Bitmap is not cloned; a reference is set.
+        /// Does not set ImagePath.
+        /// </summary>
+        /// <seealso cref="SetImage(string)"/>
+        /// <param name="bitmap">Bitmap to generate drawables for.</param>
         public void SetImage(Bitmap bitmap)
         {
             _image = bitmap;
@@ -132,21 +142,18 @@ namespace Silverfeelin.StarboundDrawables
             if (Image == null)
                 throw new DrawableException("Attempted to generate drawables for a disposed image object.");
 
-            Color? ignore = IgnoreColor;
+            var ignore = IgnoreColor;
 
-            Bitmap b = (Bitmap)Image.Clone();
+            var b = (Bitmap)Image.Clone();
             b.RotateFlip(RotateFlipStyle);
 
-            Point frameCount = new Point(
+            var frameCount = new Point(
                 (int)Math.Ceiling((decimal)b.Width / DrawableWidth),
                 (int)Math.Ceiling((decimal)b.Height / DrawableHeight));
 
-            Drawable[,] drawables = new Drawable[frameCount.X, frameCount.Y];
-
-            Color[,] template = GetTemplate();
-
+            var drawables = new Drawable[frameCount.X, frameCount.Y];
+            var template = GetTemplate();
             int whiteArgb = Color.White.ToArgb();
-
             Point imagePixel = new Point(0, 0);
 
             // Add a drawable for every signplaceholder needed.
@@ -169,12 +176,10 @@ namespace Silverfeelin.StarboundDrawables
                                 y = imagePixel.Y++;
 
                             // Pixel falls within template but is outside of the supplied image.
-                            if ((x > b.Width - 1 || y > b.Height - 1))
-                            {
+                            if (x >= b.Width || y >= b.Height)
                                 continue;
-                            }
 
-                            Color imageColor = b.GetPixel(Convert.ToInt32(x), Convert.ToInt32(y));
+                            var imageColor = b.GetPixel(Convert.ToInt32(x), Convert.ToInt32(y));
 
                             // Pixel color is invisible or ignored.
                             if ((ignore.HasValue && imageColor.Equals(ignore)) || (imageColor.A == 0 && !ReplaceBlank))
@@ -186,7 +191,7 @@ namespace Silverfeelin.StarboundDrawables
                                 imageColor = Color.FromArgb(255, 254, 254, 254);
                             }
 
-                            Color templateColor = template[i, j];
+                            var templateColor = template[i, j];
 
                             directives.AppendFormat(";{0}={1}", templateColor.ToRGBAHexString(), imageColor.ToRGBAHexString());
 
@@ -210,6 +215,87 @@ namespace Silverfeelin.StarboundDrawables
         }
 
         /// <summary>
+        /// Generates a new <see cref="DrawablesOutput"/> for this <see cref="Image"/>, using all the set properties.
+        /// Uses a gradient scaling method.
+        /// </summary>
+        /// <returns>DrawablesOutput containing the Drawables for this image.</returns>
+        public DrawablesOutput GenerateScale()
+        {
+            if (Image == null)
+                throw new DrawableException("Attempted to generate drawables for a disposed image object.");
+
+            var b = (Bitmap)Image.Clone();
+            b.RotateFlip(RotateFlipStyle);
+
+            const string template = "?setcolor=fff?replace;fff0=fff" +
+                "?crop;0;0;2;2" +
+                "?blendmult=/items/active/weapons/protectorate/aegisaltpistol/beamend.png;0;0" +
+                "?replace;A355C0A5={BottomLeft};A355C07B={BottomRight};FFFFFFA5={TopLeft};FFFFFF7B={TopRight}" +
+                "?scale={ScaleWidth};{ScaleHeight}" +
+                "?crop;1;1;{Width};{Height}";
+
+            var frameCount = new Point(
+                (int)Math.Ceiling((decimal)b.Width / 256),
+                (int)Math.Ceiling((decimal)b.Height / 256));
+
+            var drawables = new Drawable[frameCount.X, frameCount.Y];
+            var bottomLeft = Color.FromArgb(0, 0, 1, 0);
+
+            var right = b.Width - 1;
+            var top = b.Height - 1;
+
+            for (int i = 0; i < frameCount.X; i++)
+            {
+                for (int j = 0; j < frameCount.Y; j++)
+                {
+                    var sb = new StringBuilder(template);
+
+                    var r = Math.Min(right, 255);
+                    var t = Math.Min(top, 255);
+
+                    var bottomRight = Color.FromArgb(0, r, 1, 0);
+                    var topLeft = Color.FromArgb(0, 0, 1, t);
+                    var topRight = Color.FromArgb(0, r, 1, t);
+
+                    sb.Replace("{BottomLeft}", bottomLeft.ToRGBAHexString());
+                    sb.Replace("{BottomRight}", bottomRight.ToRGBAHexString());
+                    sb.Replace("{TopLeft}", topLeft.ToRGBAHexString());
+                    sb.Replace("{TopRight}", topRight.ToRGBAHexString());
+
+                    sb.Replace("{Width}", (r + 2).ToString());
+                    sb.Replace("{Height}", (t + 2).ToString());
+                    sb.Replace("{ScaleWidth}", (r + 1).ToString());
+                    sb.Replace("{ScaleHeight}", (t + 1).ToString());
+
+                    sb.Append("?replace");
+
+                    var xs = i * 256;
+                    var ys = j * 256;
+
+                    for (int x = 0; x < r + 1; x++)
+                    {
+                        for (int y = 0; y < t + 1; y++)
+                        {
+                            if (xs + x > b.Width - 1 || ys + y > b.Height - 1) continue;
+
+                            var color = b.GetPixel(xs + x, ys + y);
+                            if (color.A <= 1) continue;
+                            sb.AppendFormat(";{0}01{1}00={2}", x.ToString("X2"), y.ToString("X2"), color.ToRGBAHexString());
+                        }
+                    }
+
+                    drawables[i, j] = new Drawable(sb.ToString(), xs, ys, "/assetMissing.png");
+
+                    top -= 256;
+                }
+                top = b.Height - 1;
+                right -= 256;
+            }
+
+            return new DrawablesOutput(drawables, Image.Width, Image.Height, OffsetX, OffsetY);
+        }
+
+        /// <summary>
         /// Returns a two dimensional array containing the Color data of the signplaceholder asset.
         /// The hexadecimal digits A/F are ignored in the template;
         /// decimal increment from 9 to 10 corresponds to the hexadecimal increment from 9 to 10.
@@ -218,7 +304,7 @@ namespace Silverfeelin.StarboundDrawables
         /// <returns>Two dimensional color array.</returns>
         private Color[,] GetTemplate()
         {
-            Color[,] template = new Color[DrawableWidth, DrawableHeight];
+            var template = new Color[DrawableWidth, DrawableHeight];
 
             for (int i = 0; i < DrawableWidth; i++)
             {
