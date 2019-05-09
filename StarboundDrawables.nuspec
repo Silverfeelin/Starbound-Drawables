@@ -2,16 +2,15 @@
 <package >
   <metadata>
     <id>Silverfeelin.StarboundDrawables</id>
-    <version>1.0.0-beta4</version>
+    <version>1.1.0</version>
     <authors>Silverfeelin</authors>
     <owners>Silverfeelin</owners>
-    <licenseUrl>https://github.com/Silverfeelin/Starbound-Drawables/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/Silverfeelin/Starbound-Drawables</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/Silverfeelin/Starbound-Drawables/bb0c821ad3ff37fd6bebaf9afd3c004de8390908/dgicon-big.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>StarboundDrawables is a library that allows you to create drawables from image files.</description>
-    <releaseNotes>Memorystream fix</releaseNotes>
-    <copyright>Copyright 2016 Silverfeelin</copyright>
+    <releaseNotes>GenerateScale.</releaseNotes>
+    <license type="file">LICENSE.md</license>
     <tags>Starbound Drawables</tags>
   </metadata>
   <files>
