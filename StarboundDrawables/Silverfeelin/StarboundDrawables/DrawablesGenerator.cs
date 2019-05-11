@@ -244,6 +244,10 @@ namespace Silverfeelin.StarboundDrawables
             var right = b.Width - 1;
             var top = b.Height - 1;
 
+            var ignore = IgnoreColor;
+            var whiteArgb = Color.White.ToArgb();
+            var subWhite = Color.FromArgb(255, 254, 254, 254);
+
             for (int i = 0; i < frameCount.X; i++)
             {
                 for (int j = 0; j < frameCount.Y; j++)
@@ -272,6 +276,8 @@ namespace Silverfeelin.StarboundDrawables
                     var xs = i * 256;
                     var ys = j * 256;
 
+                    
+
                     for (int x = 0; x < r + 1; x++)
                     {
                         for (int y = 0; y < t + 1; y++)
@@ -280,7 +286,16 @@ namespace Silverfeelin.StarboundDrawables
 
                             var color = b.GetPixel(xs + x, ys + y);
                             if (color.A <= 1) continue;
-                            sb.AppendFormat(";{0}01{1}00={2}", x.ToString("X2"), y.ToString("X2"), color.ToRGBAHexString());
+
+
+                            // Pixel color is invisible or ignored.
+                            if ((ignore.HasValue && color.Equals(ignore)) || (color.A == 0 && !ReplaceBlank))
+                                continue;
+
+                            if (ReplaceWhite && color.ToArgb() == whiteArgb)
+                                color = subWhite;
+
+                            sb.AppendFormat(";{0:X2}01{1:X2}00={2}", x, y, color.ToRGBAHexString());
                         }
                     }
 
